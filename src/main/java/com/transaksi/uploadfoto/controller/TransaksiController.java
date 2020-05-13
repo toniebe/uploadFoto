@@ -2,6 +2,7 @@ package com.transaksi.uploadfoto.controller;
 
 import com.transaksi.uploadfoto.model.DBFile;
 import com.transaksi.uploadfoto.model.Transaksi;
+import com.transaksi.uploadfoto.model.TransaksiTemp;
 import com.transaksi.uploadfoto.payload.UploadFileResponse;
 import com.transaksi.uploadfoto.repository.DBFileRepository;
 import com.transaksi.uploadfoto.repository.TransaksiRepository;
@@ -35,7 +36,17 @@ public class TransaksiController {
 
     private boolean statusUpload;
 
-    @PostMapping("/uploadFoto")
+    private Transaksi transaksiTemp;
+
+    @PostMapping("/proses")
+    private ResponseEntity<?> proses(@RequestBody Transaksi transaksi){
+        transaksiTemp = transaksi;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message","memproses transaksi");
+        return new ResponseEntity<>(jsonObject,HttpStatus.OK);
+    }
+
+    @PostMapping("/proses/uploadFoto")
     private UploadFileResponse uploadFileResponse(@RequestParam("file") MultipartFile file){
         DBFile dbFile = dbFileStorageService.storeFile(file);
 
@@ -52,10 +63,10 @@ public class TransaksiController {
     }
 
 
-    @PostMapping("/saveTransaksi")
-    private ResponseEntity<?> save(@RequestBody final Transaksi transaksi){
+    @PostMapping("/proses/saveTransaksi")
+    private ResponseEntity<?> save(){
         if(statusUpload == true){
-            transaksiRepository.save(transaksi);
+            transaksiRepository.save(transaksiTemp);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("message","transaction successful");
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
