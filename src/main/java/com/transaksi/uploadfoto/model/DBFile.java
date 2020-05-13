@@ -1,7 +1,6 @@
 package com.transaksi.uploadfoto.model;
 
 import org.hibernate.annotations.GenericGenerator;
-import sun.util.resources.Bundles;
 
 import javax.persistence.*;
 
@@ -9,7 +8,8 @@ import javax.persistence.*;
 @Table(name = "files")
 public class DBFile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     private String fileName;
